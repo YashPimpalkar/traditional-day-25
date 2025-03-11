@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lazy Loaded Image Gallery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Lightbox Styles */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 1000;
+        }
+        #lightbox img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        #close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 30px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        #prev-btn { left: 20px; }
+        #next-btn { right: 20px; }
+    </style>
+</head>
+<body class="bg-light text-center py-4">
+
+    <h2 class="mb-4 fw-bold text-primary">Image Gallery Of Traditiona day VPPCOE LAST SEMESTER</h2>
+    
+    <div class="container">
+        <div class="row g-3" id="gallery">
+            <!-- JavaScript will generate images here -->
+        </div>
+    </div>
+
+    <!-- Lightbox for full-screen image -->
+    <div id="lightbox">
+        <span id="close-btn" onclick="closeLightbox()">×</span>
+        <button id="prev-btn" class="nav-btn" onclick="prevImage()">❮</button>
+        <img id="lightbox-img" src="" alt="Full-size Image">
+        <button id="next-btn" class="nav-btn" onclick="nextImage()">❯</button>
+    </div>
+
+    <script>
+        const gallery = document.getElementById('gallery');
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImg = document.getElementById("lightbox-img");
+        let currentIndex = 0;
+
+        // Define image numbers while skipping missing ranges
+        const imageNumbers = [];
+        for (let i = 3142; i <= 3466; i++) {
+            if (
+                (i >= 3153 && i <= 3213) || 
+                (i >= 3236 && i <= 3273) || 
+                (i >= 3289 && i <= 3290) || 
+                (i >= 3296 && i <= 3330) || 
+                (i >= 3352 && i <= 3353) || 
+                (i >= 3368 && i <= 3390) || 
+                (i >= 3413 && i <= 3446)
+            ) {
+                continue; // Skip missing images
+            }
+            imageNumbers.push(i);
+        }
+
+        // Generate images dynamically
+        imageNumbers.forEach((num, index) => {
+            let colDiv = document.createElement("div");
+            colDiv.className = "col-6 col-sm-4 col-md-3 col-lg-2";
+
+            let img = document.createElement("img");
+            img.dataset.src = `IMG_${num}.jpeg`; // Lazy load image
+            img.alt = `IMG_${num}`;
+            img.className = "img-fluid rounded shadow-sm border border-light lazy-img";
+            img.style.cursor = "pointer";
+            img.dataset.index = index;
+            img.onclick = () => openLightbox(index);
+
+            colDiv.appendChild(img);
+            gallery.appendChild(colDiv);
+        });
+
+        function openLightbox(index) {
+            currentIndex = index;
+            lightbox.style.display = "flex";
+            lightboxImg.src = `IMG_${imageNumbers[currentIndex]}.jpeg`;
+        }
+
+        function closeLightbox() {
+            lightbox.style.display = "none";
+        }
+
+        function prevImage() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                lightboxImg.src = `IMG_${imageNumbers[currentIndex]}.jpeg`;
+            }
+        }
+
+        function nextImage() {
+            if (currentIndex < imageNumbers.length - 1) {
+                currentIndex++;
+                lightboxImg.src = `IMG_${imageNumbers[currentIndex]}.jpeg`;
+            }
+        }
+
+        // Lazy loading function
+        function lazyLoadImages() {
+            const lazyImages = document.querySelectorAll('.lazy-img');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy-img');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            lazyImages.forEach(img => observer.observe(img));
+        }
+
+        document.addEventListener("DOMContentLoaded", lazyLoadImages);
+    </script>
+
+</body>
+</html>
