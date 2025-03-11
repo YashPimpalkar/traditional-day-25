@@ -78,7 +78,7 @@
         const lightbox = document.getElementById("lightbox");
         const lightboxImg = document.getElementById("lightbox-img");
         let currentIndex = 0;
-
+    
         // Define image numbers while skipping missing ranges
         const imageNumbers = [];
         for (let i = 3142; i <= 3466; i++) {
@@ -93,50 +93,151 @@
             ) {
                 continue; // Skip missing images
             }
-            imageNumbers.push(i);
+            imageNumbers.push(`IMG_${i}.jpeg`);
         }
-
+    
+        // Manually added images
+        const manualImages = [
+            "IMG_20250306_165228.jpg",
+            "IMG_20250306_165229.jpg",
+            "IMG_20250306_165521.jpg",
+            "IMG_20250306_165537.jpg",
+            "IMG_20250306_165538.jpg",
+            "IMG_20250306_165603.jpg",
+            "IMG_20250306_165618.jpg",
+            "IMG_20250306_165622.jpg",
+            "IMG_20250306_165644.jpg",
+            "IMG_20250306_165646.jpg",
+            "IMG_20250306_171350.jpg",
+            "IMG_20250306_171351.jpg",
+            "IMG_20250306_171408.jpg",
+            "IMG_20250306_171430.jpg",
+            "IMG_20250306_171431.jpg",
+            "IMG_20250306_171452.jpg",
+            "IMG_20250306_171453.jpg",
+            "IMG_20250306_171516.jpg",
+            "IMG_20250306_171518.jpg",
+            "IMG_20250306_171532.jpg",
+            "IMG_20250306_171533.jpg",
+            "IMG_20250306_171611.jpg",
+            "IMG_20250306_171613.jpg",
+            "IMG_20250306_172248.jpg",
+            "IMG_20250306_172250.jpg",
+            "IMG_20250306_172252.jpg",
+            "IMG_20250306_172811.jpg",
+            "IMG_20250306_172814.jpg",
+            "IMG_20250306_172817.jpg",
+            "IMG_20250306_172820.jpg",
+            "IMG_20250306_174900.jpg",
+            "IMG_20250306_174900_1.jpg",
+            "IMG_20250306_174901.jpg",
+            "IMG_20250306_175420.jpg",
+            "IMG_20250306_175422.jpg",
+            "IMG_20250306_175423.jpg",
+            "IMG_20250306_175427.jpg",
+            "IMG_20250306_175447.jpg",
+            "IMG_20250306_175448.jpg",
+            "IMG_20250306_175449.jpg",
+            "IMG_20250306_175450.jpg",
+            "IMG_20250306_175452.jpg",
+            "IMG_20250306_182032.jpg",
+            "IMG_20250306_182036.jpg",
+            "IMG_20250306_182037.jpg",
+            "IMG_20250306_182957.jpg",
+            "IMG_20250306_183008.jpg",
+            "IMG_20250306_183011.jpg",
+            "IMG_20250306_183038.jpg",
+            "IMG_20250306_183043.jpg",
+            "IMG_20250306_183044.jpg",
+            "IMG_20250306_183054.jpg",
+            "IMG_20250306_183055.jpg",
+            "IMG_20250306_183056.jpg",
+            "IMG_20250306_183057.jpg",
+            "IMG_20250306_183130.jpg",
+            "IMG_20250306_183135.jpg",
+            "IMG_20250306_183143.jpg",
+            "IMG_20250306_183212.jpg",
+            "IMG_20250306_183213.jpg",
+            "IMG_20250306_183215.jpg",
+            "IMG_20250306_183216.jpg",
+            "IMG_20250306_183217.jpg",
+            "IMG_20250306_183221.jpg",
+            "IMG_20250306_183242.jpg",
+            "IMG_20250306_183244.jpg",
+            "IMG_20250306_183247.jpg",
+            "IMG_20250306_183249.jpg",
+            "IMG_20250306_183252.jpg",
+            "IMG_20250306_183254.jpg",
+            "IMG_20250306_183303.jpg",
+            "IMG_20250306_183304.jpg",
+            "IMG_20250306_183305.jpg",
+            "IMG_20250306_183307.jpg",
+            "IMG_20250306_183310.jpg",
+            "IMG_20250306_183311.jpg",
+            "IMG_20250306_183313.jpg",
+            "IMG_20250306_183314.jpg",
+            "IMG_20250306_183336.jpg",
+            "IMG_20250306_183338.jpg",
+            "IMG_20250306_183345.jpg",
+            "IMG_20250306_183346.jpg",
+            "IMG_20250306_183508.jpg",
+            "IMG_20250306_183511.jpg",
+            "IMG_20250306_183512.jpg",
+            "IMG_20250306_183514.jpg",
+            "IMG_20250306_183515.jpg",
+            "IMG_20250306_183516.jpg",
+            "IMG_20250306_183526.jpg",
+            "IMG_20250306_183531.jpg",
+            "IMG_20250306_183535.jpg",
+            "IMG_20250306_183539.jpg",
+            "IMG_20250306_183646.jpg",
+            "IMG_20250306_183647.jpg",
+            "IMG_20250306_183650.jpg"
+        ];
+    
+        const allImages = [...imageNumbers, ...manualImages];
+    
         // Generate images dynamically
-        imageNumbers.forEach((num, index) => {
+        allImages.forEach((imgSrc, index) => {
             let colDiv = document.createElement("div");
             colDiv.className = "col-6 col-sm-4 col-md-3 col-lg-2";
-
+    
             let img = document.createElement("img");
-            img.dataset.src = `IMG_${num}.jpeg`; // Lazy load image
-            img.alt = `IMG_${num}`;
+            img.dataset.src = imgSrc; // Lazy load image
+            img.alt = imgSrc;
             img.className = "img-fluid rounded shadow-sm border border-light lazy-img";
             img.style.cursor = "pointer";
             img.dataset.index = index;
             img.onclick = () => openLightbox(index);
-
+    
             colDiv.appendChild(img);
             gallery.appendChild(colDiv);
         });
-
+    
         function openLightbox(index) {
             currentIndex = index;
             lightbox.style.display = "flex";
-            lightboxImg.src = `IMG_${imageNumbers[currentIndex]}.jpeg`;
+            lightboxImg.src = allImages[currentIndex];
         }
-
+    
         function closeLightbox() {
             lightbox.style.display = "none";
         }
-
+    
         function prevImage() {
             if (currentIndex > 0) {
                 currentIndex--;
-                lightboxImg.src = `IMG_${imageNumbers[currentIndex]}.jpeg`;
+                lightboxImg.src = allImages[currentIndex];
             }
         }
-
+    
         function nextImage() {
-            if (currentIndex < imageNumbers.length - 1) {
+            if (currentIndex < allImages.length - 1) {
                 currentIndex++;
-                lightboxImg.src = `IMG_${imageNumbers[currentIndex]}.jpeg`;
+                lightboxImg.src = allImages[currentIndex];
             }
         }
-
+    
         // Lazy loading function
         function lazyLoadImages() {
             const lazyImages = document.querySelectorAll('.lazy-img');
@@ -150,12 +251,13 @@
                     }
                 });
             });
-
+    
             lazyImages.forEach(img => observer.observe(img));
         }
-
+    
         document.addEventListener("DOMContentLoaded", lazyLoadImages);
     </script>
+    
 
 </body>
 </html>
