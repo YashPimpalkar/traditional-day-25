@@ -13,7 +13,7 @@ try:
     # Save to a text file
     with open(output_file, "w") as f:
         for file in files:
-            f.write(file + "\n")
+           f.write(f'"{file}"\n')
 
     print(f"File list saved to {output_file}")
 except Exception as e:
